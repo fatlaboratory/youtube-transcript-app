@@ -6,7 +6,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #0a0a0a;
   color: #e5e7eb;
   font-family: 'Inter', sans-serif;
@@ -19,7 +19,7 @@
   padding: 0.75rem 1rem;
   background-color: #111111;
   border-bottom: 1px solid #222222;
-  z-index: 10; /* gerekirse yukarıda kalsın */
+  z-index: 10;
 }
 
 .main {
@@ -47,7 +47,6 @@
 .copyBubble {
   background-color: #0b6623;
   color: #ffffff;
-  /* align-self kaldırıldı */
 }
 
 .input {
@@ -60,6 +59,18 @@
   font-size: 1rem;
   outline: none;
   font-family: 'Inter', sans-serif;
+}
+
+.select {
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  background-color: #121212;
+  color: #e5e7eb;
+  border: 1px solid #2a2a2a;
+  font-size: 1rem;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  margin-right: 0.75rem;
 }
 
 .button {
@@ -83,4 +94,60 @@
 .button:disabled {
   opacity: 0.5;
   cursor: default;
+}
+
+.error {
+  color: #ff4444;
+  margin: 1rem;
+  padding: 0.75rem 1rem;
+  background-color: #1f1f1f;
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  line-height: 1.6;
+}
+
+.availableLangs {
+  color: #ffffff;
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* Ad Space */
+.adSpace {
+  padding: 1rem;
+  background-color: #111111;
+  border-top: 1px solid #222222;
+  text-align: center;
+}
+
+/* About Me Section */
+.aboutMe {
+  padding: 2rem;
+  background-color: #111111;
+  border-top: 1px solid #222222;
+  color: #e5e7eb;
+}
+
+.aboutMe h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.aboutMe p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.aboutMe ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.aboutMe li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
 }
