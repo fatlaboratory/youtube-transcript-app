@@ -4,6 +4,9 @@ import styles from "../styles/Home.module.css";
 import Head from "next/head";
 import Script from "next/script";
 
+// API URL'ini tanımla
+const API_URL = "/api/transcript";
+
 export default function Home() {
   const [videoUrl, setVideoUrl] = useState("");
   const [transcript, setTranscript] = useState([]);
@@ -56,7 +59,7 @@ export default function Home() {
 
     setLoading(true);
     try {
-      const res = await fetch(`/api/transcript?videoId=${videoId}&lang=${selectedLang}`);
+      const res = await fetch(`${API_URL}?videoId=${videoId}&lang=${selectedLang}`);
       const data = await res.json();
       if (data.error) {
         if (data.error.includes("Available languages:")) {
@@ -80,8 +83,9 @@ export default function Home() {
       } else {
         setTranscript(data);
       }
-    } catch {
-      setError("Failed to fetch transcript.");
+    } catch (err) {
+      console.error("Fetch error:", err);
+      setError("Failed to fetch transcript. Please try again later.");
       setTranscript([]);
     } finally {
       setLoading(false);
