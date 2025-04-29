@@ -23,51 +23,52 @@ export default async function handler(req, res) {
     } catch (transcriptError) {
       console.error("Transcript fetch error:", transcriptError);
       
-      // Tüm dilleri kontrol et
-      const availableLanguages = [];
-      const languagesToCheck = ['en', 'tr', 'de', 'fr', 'es', 'it', 'pt', 'ru', 'ja', 'ko', 'zh', 'ar', 'hi', 'nl', 'pl', 'sv', 'da', 'fi', 'no', 'cs'];
+      // Hata mesajından mevcut dilleri çıkar
+      const errorMessage = transcriptError.message;
+      const availableLanguagesMatch = errorMessage.match(/Available languages: ([^)]+)/);
       
-      for (const checkLang of languagesToCheck) {
-        try {
-          await YoutubeTranscript.fetchTranscript(videoId, {
-            lang: checkLang,
-            country: checkLang === 'tr' ? 'TR' : 'US'
-          });
-          availableLanguages.push(checkLang);
-        } catch (error) {
-          // Bu dilde transcript yok, devam et
-          continue;
-        }
-      }
+      if (availableLanguagesMatch) {
+        const availableLanguages = availableLanguagesMatch[1].split(', ').map(lang => {
+          // Dil kodlarını tam isimlerine çevir
+          const languageNames = {
+            'en': 'English',
+            'tr': 'Turkish',
+            'de': 'German',
+            'fr': 'French',
+            'es': 'Spanish',
+            'it': 'Italian',
+            'pt': 'Portuguese',
+            'ru': 'Russian',
+            'ja': 'Japanese',
+            'ko': 'Korean',
+            'zh': 'Chinese',
+            'ar': 'Arabic',
+            'hi': 'Hindi',
+            'nl': 'Dutch',
+            'pl': 'Polish',
+            'sv': 'Swedish',
+            'da': 'Danish',
+            'fi': 'Finnish',
+            'no': 'Norwegian',
+            'cs': 'Czech',
+            'zh-CN': 'Chinese (Simplified)',
+            'zh-TW': 'Chinese (Traditional)',
+            'pt-BR': 'Portuguese (Brazil)',
+            'pt-PT': 'Portuguese (Portugal)',
+            'el': 'Greek',
+            'gu': 'Gujarati',
+            'iw': 'Hebrew',
+            'hu': 'Hungarian',
+            'fa': 'Persian',
+            'th': 'Thai',
+            'vi': 'Vietnamese',
+            'ckb': 'Kurdish'
+          };
+          return languageNames[lang] || lang;
+        });
 
-      if (availableLanguages.length > 0) {
-        // Dil kodlarını tam isimlerine çevir
-        const languageNames = {
-          'en': 'English',
-          'tr': 'Turkish',
-          'de': 'German',
-          'fr': 'French',
-          'es': 'Spanish',
-          'it': 'Italian',
-          'pt': 'Portuguese',
-          'ru': 'Russian',
-          'ja': 'Japanese',
-          'ko': 'Korean',
-          'zh': 'Chinese',
-          'ar': 'Arabic',
-          'hi': 'Hindi',
-          'nl': 'Dutch',
-          'pl': 'Polish',
-          'sv': 'Swedish',
-          'da': 'Danish',
-          'fi': 'Finnish',
-          'no': 'Norwegian',
-          'cs': 'Czech'
-        };
-
-        const availableLanguageNames = availableLanguages.map(lang => languageNames[lang] || lang);
         return res.status(404).json({ 
-          error: `No transcript available in the selected language. Available languages: ${availableLanguageNames.join(', ')}` 
+          error: `No transcript available in the selected language. Available languages: ${availableLanguages.join(', ')}` 
         });
       } else {
         return res.status(404).json({ 
