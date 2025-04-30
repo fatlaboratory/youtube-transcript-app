@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
 export default async function handler(req, res) {
-  const { videoId } = req.query;
+  const { videoId, lang } = req.query;
 
   if (req.method === 'OPTIONS') {
     res.status(200).end();
@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await fetch(`https://youtube-transcript3.p.rapidapi.com/api/transcript?videoId=${videoId}`, {
+    const response = await fetch(`https://youtube-transcript3.p.rapidapi.com/api/transcript?videoId=${videoId}&lang=${lang || 'en'}`, {
       method: 'GET',
       headers: {
         'x-rapidapi-key': process.env.RAPIDAPI_KEY,  // .env.local içine yazdığın key
@@ -26,7 +26,10 @@ export default async function handler(req, res) {
     if (response.ok && data.success) {
       return res.status(200).json(data.transcript);
     } else {
-      return res.status(404).json({ error: data.error || "Transcript not available." });
+      if (data.error && data.error.includes("Available languages:")) {
+        return res.status(404).json({ error: data.error });
+      }
+      return res.status(404).json({ error: data.error || "Transcript not available for the selected language." });
     }
   } catch (err) {
     console.error("Transcript fetch error:", err);

@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import styles from "../styles/Home.module.css";
 import Head from "next/head";
 import Script from "next/script";
+import Link from "next/link";
 
 // API URL'ini tanımla
 const API_URL = "/api/transcript";
@@ -90,6 +91,7 @@ export default function Home() {
     try {
       const res = await fetch(`${API_URL}?videoId=${videoId}&lang=${selectedLang}`);
       const data = await res.json();
+      
       if (data.error) {
         if (data.error.includes("Available languages:")) {
           const [mainError, availableLangs] = data.error.split("Available languages:");
@@ -113,6 +115,7 @@ export default function Home() {
         // Her bir transcript öğesini formatla
         const formattedTranscript = formatTranscript(data);
         setTranscript(formattedTranscript);
+        setError(""); // Başarılı durumda hata mesajını temizle
       }
     } catch (err) {
       console.error("Fetch error:", err);
@@ -151,6 +154,21 @@ export default function Home() {
       />
 
       <div className={styles.container}>
+        <nav className={styles.nav}>
+          <Link href="/" className={styles.navLink}>
+            Home
+          </Link>
+          <Link href="/about" className={styles.navLink}>
+            About
+          </Link>
+          <Link href="/privacy-policy" className={styles.navLink}>
+            Privacy Policy
+          </Link>
+          <Link href="/contact" className={styles.navLink}>
+            Contact
+          </Link>
+        </nav>
+
         <div className={styles.inputWrapper}>
           <input
             className={styles.input}
