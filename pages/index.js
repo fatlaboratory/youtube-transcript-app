@@ -13,7 +13,36 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedLang, setSelectedLang] = useState("en");
+  const [copied, setCopied] = useState(false);
   const mainRef = useRef();
+
+  const formatTranscript = (dataArray) => {
+    // 1. Tüm transcript segmentlerini tek stringe birleştir
+    let fullText = dataArray.map(item => item.text).join(" ");
+  
+    // 2. HTML karakterlerini düzelt
+    fullText = fullText
+      .replace(/&#39;/g, "'")
+      .replace(/&amp;/g, "&")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"')
+      .replace(/&apos;/g, "'");
+  
+    // 3. Gereksiz boşlukları sil
+    fullText = fullText.replace(/\s+/g, " ").trim();
+  
+    // 4. Noktalama sonrası böl, cümle başlarını büyük harfe çevir
+    const sentences = fullText
+      .split(/(?<=[.!?])\s+/)
+      .map(s => s.trim())
+      .filter(s => s.length > 0)
+      .map(s => s.charAt(0).toUpperCase() + s.slice(1));
+  
+    // 5. Her bir cümleyi ayrı obje olarak döndür
+    return sentences.map(text => ({ text }));
+  };
+  
 
   const languages = [
     { code: "en", name: "English" },
@@ -81,7 +110,9 @@ export default function Home() {
         setError("Unexpected response format.");
         setTranscript([]);
       } else {
-        setTranscript(data);
+        // Her bir transcript öğesini formatla
+        const formattedTranscript = formatTranscript(data);
+        setTranscript(formattedTranscript);
       }
     } catch (err) {
       console.error("Fetch error:", err);
@@ -97,10 +128,8 @@ export default function Home() {
     navigator.clipboard
       .writeText(allText)
       .then(() => {
-        setTranscript((prev) => [
-          ...prev,
-          { text: "Copied to clipboard!", isCopyBubble: true },
-        ]);
+        setCopied(true); // copied=true
+        setTimeout(() => setCopied(false), 2000); // sonra geri false
       })
       .catch((err) => alert("Copy failed: " + err));
   };
@@ -149,12 +178,12 @@ export default function Home() {
             {loading ? "Loading..." : "Get Transcript"}
           </button>
           <button
-            className={styles.button}
-            onClick={handleCopyAll}
-            disabled={!transcript.length}
-          >
-            Copy All
-          </button>
+          className={`${styles.button} ${copied ? styles.copied : ""}`}
+          onClick={handleCopyAll}
+          disabled={!transcript.length}
+        >
+          {copied ? "✅ Copied!" : "Copy All"}
+        </button>
         </div>
 
         {error && <div className={styles.error}>{error}</div>}
