@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import styles from '../styles/Contact.module.css';
+import styles from '../styles/Home.module.css';
 
 export default function Contact() {
   const [name, setName] = useState('');
@@ -39,87 +39,77 @@ export default function Contact() {
   };
 
   return (
-    <>
+    <div className={styles.container}>
       <Head>
-        <title>Contact - YouTube Transcript Extractor</title>
-        <meta name="description" content="Contact us for any questions or feedback" />
+        <title>İletişim - YouTube Transcript App</title>
+        <meta name="description" content="YouTube Transcript App ile iletişime geçin" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className={styles.container}>
-        <div className={styles.main}>
-          <h1 className={styles.title}>Contact Us</h1>
+      <main className={styles.main}>
+        <h1 className={styles.title}>İletişim</h1>
 
-          <p className={styles.description}>
-            Have questions or feedback? We'd love to hear from you!
-          </p>
+        <div className={styles.content}>
+          <section>
+            <h2>Bizimle İletişime Geçin</h2>
+            <p>
+              Sorularınız, önerileriniz veya geri bildirimleriniz için aşağıdaki iletişim kanallarını 
+              kullanabilirsiniz. Size en kısa sürede dönüş yapmaya çalışacağız.
+            </p>
 
-          <div className={styles.contactForm}>
-            <form onSubmit={handleSubmit}>
-              <div className={styles.formGroup}>
-                <label htmlFor="name">Name</label>
-                <input
-                  type="text"
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Your name"
-                  className={styles.input}
-                />
+            <div className={styles.contactInfo}>
+              <div className={styles.contactItem}>
+                <h3>E-posta</h3>
+                <p>
+                  <a href="mailto:info@youtubetranscript.app">info@youtubetranscript.app</a>
+                </p>
               </div>
 
-              <div className={styles.formGroup}>
-                <label htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Your email"
-                  className={styles.input}
-                />
+              <div className={styles.contactItem}>
+                <h3>GitHub</h3>
+                <p>
+                  <a href="https://github.com/yourusername/youtube-transcript-app" target="_blank" rel="noopener noreferrer">
+                    github.com/yourusername/youtube-transcript-app
+                  </a>
+                </p>
               </div>
+            </div>
+          </section>
 
-              <div className={styles.formGroup}>
-                <label htmlFor="message">Message</label>
-                <textarea
-                  id="message"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Your message"
-                  className={styles.textarea}
-                  rows="5"
-                />
-              </div>
-
-              <button 
-                type="submit"
-                className={styles.button}
-                disabled={loading}
-              >
-                {loading ? 'Sending...' : 'Send Message'}
-              </button>
-
-              {error && (
-                <div className={styles.error}>
-                  {error}
-                </div>
-              )}
-
-              {success && (
-                <div className={styles.success}>
-                  Message sent successfully! We'll get back to you soon.
-                </div>
-              )}
-            </form>
-          </div>
-
-          <div style={{ marginTop: '2rem', textAlign: 'center' }}>
-            <Link href="/" className={styles.button}>
-              Back to Home
-            </Link>
-          </div>
+          <section>
+            <h2>Sık Sorulan Sorular</h2>
+            <p>
+              Birçok sorunun cevabını Sık Sorulan Sorular sayfamızda bulabilirsiniz. Lütfen önce 
+              bu sayfayı kontrol edin.
+            </p>
+            <div className={styles.backToHome}>
+              <Link href="/faq">
+                <a>Sık Sorulan Sorular →</a>
+              </Link>
+            </div>
+          </section>
         </div>
-      </div>
-    </>
+
+        <div className={styles.backToHome}>
+          <Link href="/">
+            <a>← Ana Sayfaya Dön</a>
+          </Link>
+        </div>
+      </main>
+
+      <footer className={styles.footer}>
+        <Link href="/privacy-policy">
+          <a>Gizlilik Politikası</a>
+        </Link>
+        <span className={styles.divider}>|</span>
+        <Link href="/terms-of-service">
+          <a>Kullanım Koşulları</a>
+        </Link>
+        <span className={styles.divider}>|</span>
+        <Link href="/contact">
+          <a>İletişim</a>
+        </Link>
+      </footer>
+    </div>
   );
 } 
